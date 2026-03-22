@@ -1,6 +1,6 @@
-# 个人主页（Vercel + Railway）
+# 个人主页
 
-前端（Vite 静态站点）与后端（FastAPI）分离部署，便于分别扩展与更新。
+前端（Vite）+ 后端（FastAPI）。可 **分离部署**（Vercel + Railway）或 **单机部署**（阿里云 ECS + Nginx），详见 **[deploy/ALIYUN.md](deploy/ALIYUN.md)**。
 
 ## 仓库结构
 
@@ -72,6 +72,10 @@ docker compose up -d --build
 | `GET /api/contact` | 邮箱（及可选电话） |
 | `GET/POST /api/message` | 留言（内存存储） |
 
+## 阿里云 ECS（单服务器 + Nginx）
+
+在同一台机器上提供页面与 API：**不要设置** `VITE_API_URL`，用 Nginx 把 `/api` 反代到本机 Gunicorn。完整步骤与示例配置见 **[deploy/ALIYUN.md](deploy/ALIYUN.md)**（含 `deploy/nginx-site.conf.example`、`deploy/personal-webpage.service.example`）。
+
 ## 修改简历内容
 
-编辑 `backend/main.py` 中的 `resume_data`，再部署 Railway。
+编辑 `backend/main.py` 中的 `resume_data`，再重新部署对应环境。

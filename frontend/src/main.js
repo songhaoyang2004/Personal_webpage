@@ -1,4 +1,5 @@
 import "./style.css";
+import { t, applyDocumentLang, bindLangSwitch } from "./i18n.js";
 
 const $ = (sel, root = document) => root.querySelector(sel);
 
@@ -15,19 +16,75 @@ function escapeHtml(s) {
   return div.innerHTML;
 }
 
+let lastResume = null;
+let lastMessages = null;
+
+function applyStaticStrings() {
+  applyDocumentLang();
+  const skip = $("#i18n-skip");
+  if (skip) skip.textContent = t("skip");
+  const nav = $("#i18n-nav");
+  if (nav) nav.setAttribute("aria-label", t("navLabel"));
+  const lg = document.querySelector(".lang-switch");
+  if (lg) lg.setAttribute("aria-label", t("langGroup"));
+
+  const map = [
+    ["nav-about", "navAbout"],
+    ["nav-education", "navEducation"],
+    ["nav-experience", "navExperience"],
+    ["nav-projects", "navProjects"],
+    ["nav-publications", "navPublications"],
+    ["nav-campus", "navCampus"],
+    ["nav-skills", "navSkills"],
+    ["nav-contact", "navContact"],
+    ["nav-guestbook", "navGuestbook"],
+    ["i18n-hero-kicker", "heroKicker"],
+    ["i18n-btn-contact", "heroContact"],
+    ["i18n-btn-projects", "heroProjects"],
+    ["st-education", "sectionEducation"],
+    ["st-experience", "sectionExperience"],
+    ["st-projects", "sectionProjects"],
+    ["st-publications", "sectionPublications"],
+    ["st-campus", "sectionCampus"],
+    ["st-skills", "sectionSkills"],
+    ["st-skills-sub", "skillsSubtitle"],
+    ["st-contact", "sectionContact"],
+    ["st-guestbook", "sectionGuestbook"],
+    ["guestbook-lead", "guestbookLead"],
+    ["lbl-name", "labelName"],
+    ["lbl-content", "labelContent"],
+    ["i18n-btn-send", "btnSend"],
+  ];
+  for (const [id, key] of map) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = t(key);
+  }
+  const inpName = $("#inp-name");
+  const inpContent = $("#inp-content");
+  if (inpName) inpName.placeholder = t("phName");
+  if (inpContent) inpContent.placeholder = t("phContent");
+}
+
+function refreshAfterLangChange() {
+  applyStaticStrings();
+  if (lastResume) renderResume(lastResume);
+  if (lastMessages !== null) renderMessages(lastMessages);
+}
+
 async function fetchResume() {
   const res = await fetch(apiUrl("/api/resume"));
-  if (!res.ok) throw new Error("无法加载简历数据");
+  if (!res.ok) throw new Error(t("errLoadResume"));
   return res.json();
 }
 
 async function fetchMessages() {
   const res = await fetch(apiUrl("/api/message"));
-  if (!res.ok) throw new Error("无法加载留言");
+  if (!res.ok) throw new Error(t("errLoadMsg"));
   return res.json();
 }
 
 function renderResume(data) {
+  lastResume = data;
   $("#nav-name").textContent = data.name;
   $("#hero-title").textContent = data.name;
   $("#hero-tagline").textContent = data.tagline || "";
@@ -41,13 +98,13 @@ function renderResume(data) {
   const phone = data.phone;
   let cards = `
     <a class="contact-card" href="mailto:${encodeURIComponent(email)}">
-      <span class="contact-label">邮箱</span>
+      <span class="contact-label">${escapeHtml(t("contactEmail"))}</span>
       <span class="contact-value">${escapeHtml(email)}</span>
     </a>`;
   if (phone) {
     cards += `
     <a class="contact-card" href="tel:${String(phone).replace(/\s/g, "")}">
-      <span class="contact-label">电话</span>
+      <span class="contact-label">${escapeHtml(t("contactPhone"))}</span>
       <span class="contact-value">${escapeHtml(phone)}</span>
     </a>`;
   }
@@ -59,12 +116,15 @@ function renderResume(data) {
       const courses = (e.courses || []).length
         ? `<ul class="course-list">${e.courses.map((c) => `<li>${escapeHtml(c)}</li>`).join("")}</ul>`
         : "";
+      const courseBlock = courses
+        ? `<p class="course-label">${escapeHtml(t("courseLabel"))}</p>${courses}`
+        : "";
       return `
       <li>
         <h3>${escapeHtml(e.school)}</h3>
         <p class="meta">${escapeHtml(e.degree)}</p>
         <p class="place-line">${escapeHtml(e.place)} · ${escapeHtml(e.time)}</p>
-        ${courses ? `<p class="course-label">相关课程</p>${courses}` : ""}
+        ${courseBlock}
       </li>`;
     })
     .join("");
@@ -90,7 +150,7 @@ function renderResume(data) {
       const meta = [p.role, p.period].filter(Boolean).join(" · ");
       const metaHtml = meta ? `<p class="project-meta">${escapeHtml(meta)}</p>` : "";
       const link = p.link
-        ? `<a class="project-link" href="${escapeHtml(p.link)}" target="_blank" rel="noopener noreferrer">打开链接</a>`
+        ? `<a class="project-link" href="${escapeHtml(p.link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(t("projectLink"))}</a>`
         : "";
       return `
       <li>
@@ -104,10 +164,10 @@ function renderResume(data) {
 
   const pubEl = $("#publications-list");
   if (!data.publications || data.publications.length === 0) {
-    pubEl.innerHTML = '<li class="muted-item">暂无收录</li>';
+    pubEl.innerHTML = `<li class="muted-item">${escapeHtml(t("pubEmpty"))}</li>`;
   } else {
     pubEl.innerHTML = data.publications
-      .map((t) => `<li>${escapeHtml(t)}</li>`)
+      .map((x) => `<li>${escapeHtml(x)}</li>`)
       .join("");
   }
 
@@ -134,10 +194,10 @@ function renderResume(data) {
 }
 
 function renderMessages(list) {
+  lastMessages = list;
   const el = $("#messages-list");
   if (!list || list.length === 0) {
-    el.innerHTML =
-      '<li class="content" style="border-style:dashed;opacity:.7">暂无留言，来做第一个吧。</li>';
+    el.innerHTML = `<li class="content" style="border-style:dashed;opacity:.7">${escapeHtml(t("msgEmpty"))}</li>`;
     return;
   }
   el.innerHTML = list
@@ -155,12 +215,18 @@ function renderMessages(list) {
 
 function showError(msg) {
   const main = $("#main");
+  const old = main.querySelector(".error-banner");
+  old?.remove();
   const banner = document.createElement("div");
   banner.className = "error-banner";
   banner.setAttribute("role", "alert");
   banner.textContent = msg;
   main.insertBefore(banner, main.firstChild);
 }
+
+applyStaticStrings();
+bindLangSwitch(refreshAfterLangChange);
+$("#nav-name").textContent = t("loading");
 
 $("#message-form").addEventListener("submit", async (ev) => {
   ev.preventDefault();
@@ -184,15 +250,17 @@ $("#message-form").addEventListener("submit", async (ev) => {
           ? detail[0].msg
           : typeof detail === "string"
             ? detail
-            : "提交失败";
+            : t("errSubmit");
       throw new Error(msg);
     }
-    status.textContent = body.message || "已发送";
+    status.textContent = t("sentOk");
     form.reset();
+    if ($("#inp-name")) $("#inp-name").placeholder = t("phName");
+    if ($("#inp-content")) $("#inp-content").placeholder = t("phContent");
     const messages = await fetchMessages();
     renderMessages(messages);
   } catch (e) {
-    status.textContent = e.message || "网络错误";
+    status.textContent = e.message || t("errNetwork");
   }
 });
 
@@ -203,9 +271,6 @@ $("#message-form").addEventListener("submit", async (ev) => {
     const messages = await fetchMessages();
     renderMessages(messages);
   } catch (e) {
-    showError(
-      e.message ||
-        "加载失败。本地请同时运行 backend（uvicorn）并执行 npm run dev；线上请在 Vercel 配置 VITE_API_URL。"
-    );
+    showError(e.message || t("errGeneric"));
   }
 })();

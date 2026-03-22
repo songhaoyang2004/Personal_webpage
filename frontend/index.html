@@ -11,20 +11,24 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <a class="skip-link" href="#main">跳到主要内容</a>
+  <a class="skip-link" id="i18n-skip" href="#main">跳到主要内容</a>
   <header class="site-header">
     <div class="header-inner">
       <span class="logo" id="nav-name">加载中…</span>
-      <nav class="nav" aria-label="页面导航">
-        <a href="#about">关于</a>
-        <a href="#education">教育</a>
-        <a href="#experience">实习</a>
-        <a href="#projects">项目</a>
-        <a href="#publications">论文</a>
-        <a href="#campus">校园</a>
-        <a href="#skills">技能</a>
-        <a href="#contact">联系</a>
-        <a href="#guestbook">留言</a>
+      <div class="lang-switch" role="group" aria-label="语言切换">
+        <button type="button" class="lang-btn" data-lang="zh" aria-pressed="true">中文</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <nav class="nav" id="i18n-nav" aria-label="页面导航">
+        <a href="#about" id="nav-about">关于</a>
+        <a href="#education" id="nav-education">教育</a>
+        <a href="#experience" id="nav-experience">实习</a>
+        <a href="#projects" id="nav-projects">项目</a>
+        <a href="#publications" id="nav-publications">论文</a>
+        <a href="#campus" id="nav-campus">校园</a>
+        <a href="#skills" id="nav-skills">技能</a>
+        <a href="#contact" id="nav-contact">联系</a>
+        <a href="#guestbook" id="nav-guestbook">留言</a>
       </nav>
     </div>
   </header>
@@ -33,70 +37,70 @@
     <section class="hero" id="about" aria-labelledby="hero-title">
       <div class="hero-bg" aria-hidden="true"></div>
       <div class="hero-content">
-        <p class="hero-kicker">你好，我是</p>
+        <p class="hero-kicker" id="i18n-hero-kicker">你好，我是</p>
         <h1 class="hero-title" id="hero-title">—</h1>
         <p class="hero-tagline" id="hero-tagline"></p>
         <p class="hero-meta" id="hero-meta-line">
           <span id="hero-location"></span>
         </p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#contact">联系我</a>
-          <a class="btn btn-ghost" href="#projects">查看项目</a>
+          <a class="btn btn-primary" id="i18n-btn-contact" href="#contact">联系我</a>
+          <a class="btn btn-ghost" id="i18n-btn-projects" href="#projects">查看项目</a>
         </div>
       </div>
     </section>
 
     <div class="container">
       <section id="education" class="section">
-        <h2 class="section-title">教育背景</h2>
+        <h2 class="section-title" id="st-education">教育背景</h2>
         <ul class="card-list" id="education-list"></ul>
       </section>
 
       <section id="experience" class="section">
-        <h2 class="section-title">实习经验</h2>
+        <h2 class="section-title" id="st-experience">实习经验</h2>
         <ul class="timeline" id="experience-list"></ul>
       </section>
 
       <section id="projects" class="section">
-        <h2 class="section-title">项目经历</h2>
+        <h2 class="section-title" id="st-projects">项目经历</h2>
         <ul class="project-grid" id="projects-list"></ul>
       </section>
 
       <section id="publications" class="section">
-        <h2 class="section-title">论文</h2>
+        <h2 class="section-title" id="st-publications">论文</h2>
         <ul class="publications-list" id="publications-list"></ul>
       </section>
 
       <section id="campus" class="section">
-        <h2 class="section-title">校园经历</h2>
+        <h2 class="section-title" id="st-campus">校园经历</h2>
         <ul class="timeline" id="campus-list"></ul>
       </section>
 
       <section id="skills" class="section">
-        <h2 class="section-title">技能与语言</h2>
+        <h2 class="section-title" id="st-skills">技能与语言</h2>
         <p class="section-lead" id="language-block"></p>
-        <h3 class="subsection-title">编程与技术</h3>
+        <h3 class="subsection-title" id="st-skills-sub">编程与技术</h3>
         <div class="skill-tags" id="skills-list"></div>
       </section>
 
       <section id="contact" class="section section-contact">
-        <h2 class="section-title">联系方式</h2>
+        <h2 class="section-title" id="st-contact">联系方式</h2>
         <div class="contact-cards" id="contact-cards"></div>
       </section>
 
       <section id="guestbook" class="section section-guestbook">
-        <h2 class="section-title">留言板</h2>
-        <p class="section-lead">欢迎留言（数据保存在 Railway 服务内存中，重启后可能清空）</p>
+        <h2 class="section-title" id="st-guestbook">留言板</h2>
+        <p class="section-lead" id="guestbook-lead">欢迎留言（数据保存在服务器内存中，重启后可能清空）</p>
         <form class="guestbook-form" id="message-form">
           <label class="field">
-            <span>称呼</span>
-            <input type="text" name="name" required maxlength="64" autocomplete="nickname" placeholder="怎么称呼你" />
+            <span id="lbl-name">称呼</span>
+            <input type="text" id="inp-name" name="name" required maxlength="64" autocomplete="nickname" placeholder="怎么称呼你" />
           </label>
           <label class="field">
-            <span>内容</span>
-            <textarea name="content" required maxlength="2000" rows="4" placeholder="想说点什么…"></textarea>
+            <span id="lbl-content">内容</span>
+            <textarea name="content" id="inp-content" required maxlength="2000" rows="4" placeholder="想说点什么…"></textarea>
           </label>
-          <button type="submit" class="btn btn-primary">发送留言</button>
+          <button type="submit" class="btn btn-primary" id="i18n-btn-send">发送留言</button>
           <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
         </form>
         <ul class="guestbook-list" id="messages-list"></ul>

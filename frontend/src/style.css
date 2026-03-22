@@ -80,6 +80,34 @@ a:hover {
   letter-spacing: 0.02em;
 }
 
+.lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: auto;
+}
+
+.lang-btn {
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  cursor: pointer;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.lang-btn:hover {
+  color: var(--text);
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+.lang-btn[aria-pressed="true"] {
+  color: var(--accent);
+  border-color: rgba(245, 158, 11, 0.45);
+}
+
 .nav {
   display: flex;
   flex-wrap: wrap;
@@ -537,6 +565,10 @@ a:hover {
   .header-inner {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .lang-switch {
+    margin-left: 0;
   }
 
   .timeline .time {
