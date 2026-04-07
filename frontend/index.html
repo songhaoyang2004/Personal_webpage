@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="宋昊洋 — 个人主页、简历与项目" />
-  <title>宋昊洋 | 个人主页</title>
+  <meta name="description" content="昊洋 — 个人主页、简历与项目" />
+  <title>昊洋 | 个人主页</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,7 +28,6 @@
         <a href="#campus" id="nav-campus">校园</a>
         <a href="#skills" id="nav-skills">技能</a>
         <a href="#contact" id="nav-contact">联系</a>
-        <a href="#guestbook" id="nav-guestbook">留言</a>
       </nav>
     </div>
   </header>
@@ -36,16 +35,30 @@
   <main id="main">
     <section class="hero" id="about" aria-labelledby="hero-title">
       <div class="hero-bg" aria-hidden="true"></div>
-      <div class="hero-content">
-        <p class="hero-kicker" id="i18n-hero-kicker">你好，我是</p>
-        <h1 class="hero-title" id="hero-title">—</h1>
-        <p class="hero-tagline" id="hero-tagline"></p>
-        <p class="hero-meta" id="hero-meta-line">
-          <span id="hero-location"></span>
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" id="i18n-btn-contact" href="#contact">联系我</a>
-          <a class="btn btn-ghost" id="i18n-btn-projects" href="#projects">查看项目</a>
+      <div class="hero-inner">
+        <div class="hero-content">
+          <p class="hero-kicker" id="i18n-hero-kicker">你好，我是</p>
+          <h1 class="hero-title" id="hero-title">—</h1>
+          <p class="hero-tagline" id="hero-tagline"></p>
+          <p class="hero-meta" id="hero-meta-line">
+            <span id="hero-location"></span>
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" id="i18n-btn-contact" href="#contact">联系我</a>
+            <a class="btn btn-ghost" id="i18n-btn-projects" href="#projects">查看项目</a>
+          </div>
+        </div>
+        <div class="hero-photo-wrap">
+          <img
+            id="hero-photo"
+            class="hero-photo"
+            src="/portrait.png"
+            alt=""
+            width="400"
+            height="500"
+            decoding="async"
+            fetchpriority="high"
+          />
         </div>
       </div>
     </section>
@@ -88,25 +101,10 @@
         <div class="contact-cards" id="contact-cards"></div>
       </section>
 
-      <section id="guestbook" class="section section-guestbook">
-        <h2 class="section-title" id="st-guestbook">留言板</h2>
-        <p class="section-lead" id="guestbook-lead">欢迎留言（数据保存在服务器内存中，重启后可能清空）</p>
-        <form class="guestbook-form" id="message-form">
-          <label class="field">
-            <span id="lbl-name">称呼</span>
-            <input type="text" id="inp-name" name="name" required maxlength="64" autocomplete="nickname" placeholder="怎么称呼你" />
-          </label>
-          <label class="field">
-            <span id="lbl-content">内容</span>
-            <textarea name="content" id="inp-content" required maxlength="2000" rows="4" placeholder="想说点什么…"></textarea>
-          </label>
-          <button type="submit" class="btn btn-primary" id="i18n-btn-send">发送留言</button>
-          <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
-        </form>
-        <ul class="guestbook-list" id="messages-list"></ul>
-      </section>
     </div>
   </main>
+
+  <button type="button" class="back-top" id="back-top" hidden aria-label="回到顶部">↑</button>
 
   <footer class="site-footer">
     <div class="container footer-inner">

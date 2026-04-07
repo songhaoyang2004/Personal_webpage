@@ -66,11 +66,10 @@ docker compose up -d --build
 | 路径 | 说明 |
 |------|------|
 | `GET /health` | 健康检查 |
-| `GET /api/resume` | 完整简历 JSON |
-| `GET /api/projects` | 项目列表 |
-| `GET /api/skills` | 技能 |
-| `GET /api/contact` | 邮箱（及可选电话） |
-| `GET/POST /api/message` | 留言（内存存储） |
+| `GET /api/resume?lang=zh` 或 `?lang=en` | 完整简历（中/英内容来自后端） |
+| `GET /api/projects?lang=` | 项目列表 |
+| `GET /api/skills?lang=` | 技能 |
+| `GET /api/contact?lang=` | 邮箱（及可选电话） |
 
 ## 阿里云 ECS（单服务器 + Nginx）
 

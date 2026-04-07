@@ -3,7 +3,7 @@ const STORAGE_KEY = "personal-site-lang";
 /** @type {Record<string, Record<string, string>>} */
 const STRINGS = {
   zh: {
-    docTitle: "宋昊洋 | 个人主页",
+    docTitle: "昊洋 | 个人主页",
     loading: "加载中…",
     skip: "跳到主要内容",
     navLabel: "页面导航",
@@ -15,13 +15,18 @@ const STRINGS = {
     navCampus: "校园",
     navSkills: "技能",
     navContact: "联系",
-    navGuestbook: "留言",
     langGroup: "语言切换",
     langZh: "中文",
     langEn: "English",
     heroKicker: "你好，我是",
     heroContact: "联系我",
     heroProjects: "查看项目",
+    portraitAlt: "{name}的个人照片",
+    courseLinkTitle: "在新标签页打开课程介绍",
+    companyLinkTitle: "在新标签页打开机构或公司简介",
+    eduLinkTitle: "在新标签页打开学校或专业介绍",
+    skillLinkTitle: "在新标签页打开技术介绍或官网",
+    mapLinkTitle: "在 Google 地图中打开",
     sectionEducation: "教育背景",
     sectionExperience: "实习经验",
     sectionProjects: "项目经历",
@@ -30,30 +35,21 @@ const STRINGS = {
     sectionSkills: "技能与语言",
     skillsSubtitle: "编程与技术",
     sectionContact: "联系方式",
-    sectionGuestbook: "留言板",
-    guestbookLead:
-      "欢迎留言（数据保存在服务器内存中，重启后可能清空）",
-    labelName: "称呼",
-    labelContent: "内容",
-    phName: "怎么称呼你",
-    phContent: "想说点什么…",
-    btnSend: "发送留言",
     contactEmail: "邮箱",
     contactPhone: "电话",
     courseLabel: "相关课程",
     projectLink: "打开链接",
     pubEmpty: "暂无收录",
-    msgEmpty: "暂无留言，来做第一个吧。",
     errLoadResume: "无法加载简历数据",
-    errLoadMsg: "无法加载留言",
     errGeneric:
       "加载失败。本地请运行 backend 与 npm run dev；分离部署请配置 VITE_API_URL。",
     errNetwork: "网络错误",
-    errSubmit: "提交失败",
-    sentOk: "已发送",
+    copyEmail: "复制邮箱",
+    copied: "已复制",
+    backToTop: "回到顶部",
   },
   en: {
-    docTitle: "Song Haoyang | Personal site",
+    docTitle: "Haoyang | Personal site",
     loading: "Loading…",
     skip: "Skip to main content",
     navLabel: "Page navigation",
@@ -65,13 +61,18 @@ const STRINGS = {
     navCampus: "Campus",
     navSkills: "Skills",
     navContact: "Contact",
-    navGuestbook: "Guestbook",
     langGroup: "Language",
     langZh: "中文",
     langEn: "English",
     heroKicker: "Hi, I'm",
     heroContact: "Contact me",
     heroProjects: "View projects",
+    portraitAlt: "Portrait of {name}",
+    courseLinkTitle: "Open course overview in a new tab",
+    companyLinkTitle: "Open organization or company site in a new tab",
+    eduLinkTitle: "Open school or programme page in a new tab",
+    skillLinkTitle: "Open documentation or official site in a new tab",
+    mapLinkTitle: "Open in Google Maps",
     sectionEducation: "Education",
     sectionExperience: "Internships",
     sectionProjects: "Projects",
@@ -80,27 +81,18 @@ const STRINGS = {
     sectionSkills: "Skills & languages",
     skillsSubtitle: "Programming & tools",
     sectionContact: "Contact",
-    sectionGuestbook: "Guestbook",
-    guestbookLead:
-      "Leave a message (stored in server memory; may clear after restart).",
-    labelName: "Name",
-    labelContent: "Message",
-    phName: "How should we call you?",
-    phContent: "Say something…",
-    btnSend: "Send",
     contactEmail: "Email",
     contactPhone: "Phone",
     courseLabel: "Relevant coursework",
     projectLink: "Open link",
     pubEmpty: "None listed.",
-    msgEmpty: "No messages yet — be the first.",
     errLoadResume: "Could not load profile data.",
-    errLoadMsg: "Could not load messages.",
     errGeneric:
       "Load failed. Run backend + npm run dev locally, or set VITE_API_URL for split deploy.",
     errNetwork: "Network error",
-    errSubmit: "Submit failed",
-    sentOk: "Sent",
+    copyEmail: "Copy email",
+    copied: "Copied",
+    backToTop: "Back to top",
   },
 };
 
@@ -127,7 +119,7 @@ export function applyDocumentLang() {
 }
 
 /**
- * @param {() => void} onChange 切换语言后刷新界面
+ * @param {(() => void | Promise<void>) | undefined} onChange 切换语言后刷新界面（可异步拉取简历）
  */
 export function bindLangSwitch(onChange) {
   const group = document.querySelector(".lang-switch");
@@ -146,14 +138,14 @@ export function bindLangSwitch(onChange) {
     }
   }
 
-  function onPick(lang) {
+  async function onPick(lang) {
     setLang(lang);
     applyDocumentLang();
-    onChange?.();
+    await onChange?.();
     syncPressed();
   }
 
-  zhBtn?.addEventListener("click", () => onPick("zh"));
-  enBtn?.addEventListener("click", () => onPick("en"));
+  zhBtn?.addEventListener("click", () => void onPick("zh"));
+  enBtn?.addEventListener("click", () => void onPick("en"));
   syncPressed();
 }
